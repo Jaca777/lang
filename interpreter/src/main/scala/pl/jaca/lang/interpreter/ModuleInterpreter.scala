@@ -9,18 +9,16 @@ import pl.jaca.lang.recognizer.LangParser.ModuleContext
   * @author Jaca777
   *         Created 2016-03-23 at 13
   */
-class ModuleInterpreter extends LangBaseVisitor[Unit] with Interpreter {
+class ModuleInterpreter extends LangBaseVisitor[Unit] {
 
   private val log = Logger(LoggerFactory.getLogger("ModuleInterpreter"))
 
   override def visitModule(ctx: ModuleContext) {
-    if (hasSucceeded(ctx)) {
-      val name: String = ctx.name.getText
-      log.debug("Executing module: " + name)
-      val block = ctx.block()
-      val blockInterpreter = new BlockInterpreter(new Scope(Map.empty))
-      blockInterpreter.visitBlock(block)
-    } else fail(ctx)
+    val name: String = ctx.name.getText
+    log.debug("Executing module: " + name)
+    val block = ctx.block()
+    val blockInterpreter = new BlockInterpreter(new Scope)
+    blockInterpreter.visitBlock(block)
   }
 
 }

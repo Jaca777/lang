@@ -1,7 +1,9 @@
 module dupa {
-    val a: lel = 2;
+    val a: int = 2;
     a = 2;
     a = 3;
-    a = a + 2;
-    print(a);
+    a = {
+       print(8);
+       2;
+    };
 }

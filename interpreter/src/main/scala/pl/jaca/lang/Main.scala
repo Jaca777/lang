@@ -2,9 +2,9 @@ package pl.jaca.lang
 
 import java.io.{File, FileReader}
 
-import org.antlr.v4.runtime.{CommonTokenStream, TokenStream, ANTLRInputStream, CharStream}
-import pl.jaca.lang.interpreter.{Interpreter, ModuleInterpreter}
-import pl.jaca.lang.recognizer.{LangParser, LangLexer}
+import org.antlr.v4.runtime.{ANTLRInputStream, CharStream, CommonTokenStream, TokenStream}
+import pl.jaca.lang.interpreter.ModuleInterpreter
+import pl.jaca.lang.recognizer.{LangLexer, LangParser}
 
 /**
   * @author Jaca777
@@ -19,7 +19,7 @@ object Main {
     //parser generates abstract syntax tree
     val parser: LangParser = new LangParser(tokens)
     val module: LangParser.ModuleContext = parser.module
-    val moduleInterpreter: ModuleInterpreter = new ModuleInterpreter with Interpreter
+    val moduleInterpreter: ModuleInterpreter = new ModuleInterpreter
     moduleInterpreter.visitModule(module)
   }
 }

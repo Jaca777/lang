@@ -8,10 +8,9 @@ QUALIFIED_NAME : [a-zA-Z]+ ;
 block : '{' statement+ '}' ;
 
 statement
-    : initialization     ';'
-    | assignment         ';'
-    | conditional        ';'
-    | expr               ';'
+    : initialization      ';'
+    | assignment          ';'
+    | expr                ';'
     | functionDeclaration ';'
     ;
 
@@ -32,22 +31,34 @@ assignment
     : name=QUALIFIED_NAME '=' value=expr
     ;
 
-//If
-conditional
-    : 'if' '(' expr ')' expr
-    ( 'else' 'if' '(' expr ')' expr )*
-    ( 'else' expr)?
-    ;
 
 //Expression
 expr
-    : left=expr op=('*'|'/') right=expr                     #opExpr
-    | left=expr op=('+'|'-') right=expr                     #opExpr
-    | '(' expr ')'                                          #parenExpr
-    | INT                                                   #atomExpr
-    | ref=QUALIFIED_NAME                                    #refExpr
-    | name=QUALIFIED_NAME '(' args=actualArguments ')'      #call
+    : paren                             #parenExpr
+    | literal                           #literalExpr
+    | reference                         #referenceExpr
+    | call                              #callExpr
+    | block                             #blockExpr
+    | conditional                       #conditionalExpr
+    | left=expr op=('*'|'/') right=expr #operatorExpr
+    | left=expr op=('+'|'-') right=expr #operatorExpr
     ;
+
+
+
+paren : '(' expr ')'  ;
+
+literal : INT ;
+
+reference : QUALIFIED_NAME ;
+
+call : name=QUALIFIED_NAME '(' args=actualArguments ')' ;
+
+conditional : c_if c_elseif* c_else? ;
+
+c_if     : 'if' '(' expr ')' expr         ;
+c_elseif : 'else' 'if' '(' expr ')' expr  ;
+c_else   : 'else' expr                    ;
 
 actualArguments
     : arguments=expr (',' arguments=expr)*

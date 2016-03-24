@@ -1,6 +1,6 @@
 package pl.jaca.lang.interpreter
 
-import pl.jaca.lang.interpreter.value.Value
+import pl.jaca.lang.interpreter.Interpreter._
 import pl.jaca.lang.recognizer.LangBaseVisitor
 import pl.jaca.lang.recognizer.LangParser._
 
@@ -8,13 +8,14 @@ import pl.jaca.lang.recognizer.LangParser._
   * @author Jaca777
   *         Created 2016-03-23 at 14
   */
-class ExpressionInterpreter(scope: Scope) extends LangBaseVisitor[Value] with Interpreter {
-  override def visitCall(ctx: CallContext): Value = {
-    val callIntepreter = new CallInterpreter(scope)
-    callIntepreter.visitCall(ctx)
+class ExpressionInterpreter(scope: Scope) extends LangBaseVisitor[Value]{
+
+  override def visitCallExpr(ctx: CallExprContext): Value = {
+    val callInterpreter = new CallInterpreter(scope)
+    callInterpreter.visitCall(ctx.call())
   }
 
-  override def visitOpExpr(ctx: OpExprContext): Value = {
+  override def visitOperatorExpr(ctx: OperatorExprContext): Value = {
     val left = visit(ctx.left)
     val right = visit(ctx.right)
     val op = ctx.op.getText
@@ -22,17 +23,26 @@ class ExpressionInterpreter(scope: Scope) extends LangBaseVisitor[Value] with In
   }
 
   private def applyOperator(op: String, left: Value, right: Value): Value = op match {
-    case "+" => Value(left.asInt + right.asInt, "int")
+    case "*" => Value(left.asInt * right.asInt, right.`type`)
+    case "/" => Value(left.asInt / right.asInt, right.`type`)
+    case "+" => Value(left.asInt + right.asInt, right.`type`)
+    case "-" => Value(left.asInt - right.asInt, right.`type`)
   }
 
-  override def visitRefExpr(ctx: RefExprContext): Value = {
-    val name = ctx.ref.getText
+  override def visitReferenceExpr(ctx: ReferenceExprContext): Value = {
+    val name = ctx.reference().QUALIFIED_NAME().getText
     val value = scope.references.get(name)
-    if(value.isDefined) value.get
-    else
+    if (value.isDefined) value.get
+    else throw new InterpreterException(s"Reference $name not found.", lineOf(ctx))
   }
 
-  override def visitAtomExpr(ctx: AtomExprContext): Value = super.visitAtomExpr(ctx)
+  override def visitLiteralExpr(ctx: LiteralExprContext): Value =
+    Value(ctx.literal().INT().getSymbol.getText.toInt, "int")
 
-  override def visitParenExpr(ctx: ParenExprContext): Value = super.visitParenExpr(ctx)
+  override def visitParenExpr(ctx: ParenExprContext): Value = visit(ctx.paren().expr())
+
+  override def visitBlock(ctx: BlockContext): Value = {
+    val blockInterpreter = new BlockInterpreter(scope)
+    blockInterpreter.visitBlock(ctx)
+  }
 }
