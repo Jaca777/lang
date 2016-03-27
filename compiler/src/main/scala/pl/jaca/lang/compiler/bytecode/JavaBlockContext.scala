@@ -1,14 +1,16 @@
 package pl.jaca.lang.compiler.bytecode
 
+import pl.jaca.lang.compiler.`type`.Type
+
 /**
   * @author Jaca777
   *         Created 2016-03-25 at 21
   */
 class JavaBlockContext(variables: Set[JavaVariable], stack: Stack) {
 
-  def pushStack(`type`: String): JavaBlockContext = new JavaBlockContext(variables, stack.push(`type`))
+  def pushStack(`type`: Type): JavaBlockContext = new JavaBlockContext(variables, stack.push(`type`))
 
-  def popStack(`type`: String): JavaBlockContext = new JavaBlockContext(variables, stack.pop(`type`))
+  def popStack(`type`: Type): JavaBlockContext = new JavaBlockContext(variables, stack.pop(`type`))
 
   def topStackType = stack.topType
 

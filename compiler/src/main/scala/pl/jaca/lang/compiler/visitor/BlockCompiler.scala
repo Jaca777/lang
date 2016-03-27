@@ -3,7 +3,7 @@ package pl.jaca.lang.compiler.visitor
 
 import org.objectweb.asm.tree.{InsnList, MethodNode}
 import org.objectweb.asm.{ClassVisitor, MethodVisitor}
-import pl.jaca.lang.compiler.bytecode.{Stack, JavaBlockContext, ScopeContext}
+import pl.jaca.lang.compiler.bytecode._
 import pl.jaca.lang.recognizer.LangBaseVisitor
 import pl.jaca.lang.recognizer.LangParser.{StatementContext, BlockContext, FunctionDeclarationContext, FunctionDeclarationStatementContext}
 import scala.collection.JavaConverters._
@@ -15,35 +15,43 @@ import scala.collection.JavaConverters._
 class BlockCompiler(scope: ScopeContext, methodVisitor: MethodVisitor)
   extends LangBaseVisitor[ScopeContext] {
 
+  private val emptyBlock = new JavaBlockContext(Set.empty, new Stack())
+  private val mutableBlock = new MutableBlockWrapper(emptyBlock)
+  private val mutableScope = new MutableScopeWrapper(scope)
 
   override def visitBlock(ctx: BlockContext): ScopeContext = {
     val statements = ctx.statement().asScala.toList
+    declareFunctions(statements)
+    visitStatements(statements)
+    mutableScope.current
+  }
+
+  def declareFunctions(statements: List[StatementContext]): Unit = {
     val declarations = functionDeclarations(statements)
-    val scopeWithFunctions = scope.declareFunctions(declarations)
-    val (instructions, newScopeCtx) = compileStatements(statements, scopeWithFunctions)
+    mutableScope.declareFunctions(declarations)
+  }
+
+  def visitStatements(statements: List[StatementContext]): Unit = {
+    val instructions = compileStatements(statements)
     visitInstructions(instructions)
-    newScopeCtx
   }
 
   private def functionDeclarations(statements: List[StatementContext]) = {
-    val declResolver = new FunctionDeclarationsResolver(scope.scope)
+    val declResolver = new FunctionDeclarationsResolver(mutableScope.current.scope)
     for (statement <- statements)
       declResolver.visit(statement)
     declResolver.getDeclarations
   }
 
-  private def compileStatements(statements: List[StatementContext], scopeContext: ScopeContext): (InsnList, ScopeContext) = {
+  private def compileStatements(statements: List[StatementContext]): InsnList = {
     val instructions = new InsnList()
-    val javaBlock = new JavaBlockContext(Set.empty, new Stack())
-    def compileStatementsAcc(statements: List[StatementContext], scopeContext: ScopeContext, javaBlockContext: JavaBlockContext): ScopeContext =
-      if (statements.isEmpty) scopeContext
-      else {
-        val statement = statements.head
-        val compiler = new StatementCompiler(instructions, scopeContext, javaBlockContext)
-        val (newScopeCtx, newBlockContext) = compiler.visit(statement)
-        compileStatementsAcc(statements.tail, newScopeCtx, javaBlockContext)
-      }
-    (instructions, compileStatementsAcc(statements, scopeContext, javaBlock))
+    for (statement <- statements) {
+      val compiler = new StatementCompiler(instructions, mutableScope.current, mutableBlock.current)
+      val (scope, block) = compiler.visit(statement)
+      mutableScope.set(scope)
+      mutableBlock.set(block)
+    }
+    instructions
   }
 
 

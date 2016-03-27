@@ -1,5 +1,7 @@
 package pl.jaca.lang.compiler.visitor
 
+import pl.jaca.lang.compiler.`type`.Type
+import pl.jaca.lang.compiler.`type`.TypeResolver
 import pl.jaca.lang.compiler.bytecode.{Scope, FunctionDeclaration}
 import pl.jaca.lang.recognizer.LangBaseVisitor
 import pl.jaca.lang.recognizer.LangParser.{FunctionDeclarationStatementContext, FunctionDeclarationContext}
@@ -15,7 +17,9 @@ class FunctionDeclarationsResolver(scope: Scope) extends LangBaseVisitor[Unit] {
     val declContext = ctx.functionDeclaration
     val desc = declContext.functionDescriptor
     val block = declContext.block
-    val declaration = new FunctionDeclaration(desc.name.getText, scope, desc.`type`.getText, declContext)
+    val typeName = desc.`type`.getText
+    val t = TypeResolver.forName(typeName)
+    val declaration = new FunctionDeclaration(desc.name.getText, scope, t, declContext)
     this.declarations += declaration
   }
 
