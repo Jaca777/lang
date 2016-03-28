@@ -26,7 +26,7 @@ functionDeclaration
     ;
 
 initialization
-    : 'val' name=QUALIFIED_NAME ':' type=QUALIFIED_NAME '=' value=expr
+    : 'var' name=QUALIFIED_NAME ':' type=QUALIFIED_NAME '=' value=expr
     ;
 
 assignment
