@@ -50,7 +50,9 @@ expr
 
 paren : '(' expr ')'  ;
 
-literal : INT ;
+literal
+    : INT #intLiteral
+    ;
 
 reference : name=QUALIFIED_NAME ;
 

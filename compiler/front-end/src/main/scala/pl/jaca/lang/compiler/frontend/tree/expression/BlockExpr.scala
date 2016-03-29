@@ -1,12 +1,14 @@
 package pl.jaca.lang.compiler.frontend.tree.expression
 
 import pl.jaca.lang.compiler.frontend.tree.Visitor
+import pl.jaca.lang.compiler.frontend.tree.statement.Statement
+import pl.jaca.lang.compiler.frontend.tree.typesystem.Type
 
 /**
   * @author Jaca777
   *         Created 2016-03-28 at 21
   */
-case class BlockExpr() extends Expression {
+case class BlockExpr(statements: List[Statement], override val `type`: Type) extends Expression(`type`) {
   override def accept[T](visitor: Visitor[T]): T = {
     visitor.visitBlock(this)
   }

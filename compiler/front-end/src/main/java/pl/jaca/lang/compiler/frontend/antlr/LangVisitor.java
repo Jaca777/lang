@@ -1,4 +1,4 @@
-// Generated from C:/Users/Szymon/Desktop/Programming/lang/interpreter/src/main/resources/pl/jaca/lang\Lang.g4 by ANTLR 4.5.1
+// Generated from C:/Users/Szymon/Desktop/Programming/lang/compiler/front-end/src/main/resources/pl/jaca/lang\Lang.g4 by ANTLR 4.5.1
 package pl.jaca.lang.compiler.frontend.antlr;
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 
@@ -130,11 +130,12 @@ public interface LangVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitParen(LangParser.ParenContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link LangParser#literal}.
+	 * Visit a parse tree produced by the {@code intLiteral}
+	 * labeled alternative in {@link LangParser#literal}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitLiteral(LangParser.LiteralContext ctx);
+	T visitIntLiteral(LangParser.IntLiteralContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link LangParser#reference}.
 	 * @param ctx the parse tree

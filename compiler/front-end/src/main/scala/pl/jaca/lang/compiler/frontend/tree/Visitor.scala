@@ -42,8 +42,8 @@ class Visitor[T] {
     throw new UnsupportedOperationException("visitReference is not implemented.")
   }
 
-  def visitLiteral(literal: LiteralExpr): T = {
-    throw new UnsupportedOperationException("visitLiteral is not implemented.")
+  def visitIntLiteral(literal: IntLiteral): T = {
+    throw new UnsupportedOperationException("visitIntLiteral is not implemented.")
   }
 
   def visitBlock(block: BlockExpr): T = {

@@ -1,4 +1,4 @@
-// Generated from C:/Users/Szymon/Desktop/Programming/lang/interpreter/src/main/resources/pl/jaca/lang\Lang.g4 by ANTLR 4.5.1
+// Generated from C:/Users/Szymon/Desktop/Programming/lang/compiler/front-end/src/main/resources/pl/jaca/lang\Lang.g4 by ANTLR 4.5.1
 package pl.jaca.lang.compiler.frontend.antlr;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
@@ -210,15 +210,17 @@ public interface LangListener extends ParseTreeListener {
 	 */
 	void exitParen(LangParser.ParenContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link LangParser#literal}.
+	 * Enter a parse tree produced by the {@code intLiteral}
+	 * labeled alternative in {@link LangParser#literal}.
 	 * @param ctx the parse tree
 	 */
-	void enterLiteral(LangParser.LiteralContext ctx);
+	void enterIntLiteral(LangParser.IntLiteralContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link LangParser#literal}.
+	 * Exit a parse tree produced by the {@code intLiteral}
+	 * labeled alternative in {@link LangParser#literal}.
 	 * @param ctx the parse tree
 	 */
-	void exitLiteral(LangParser.LiteralContext ctx);
+	void exitIntLiteral(LangParser.IntLiteralContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link LangParser#reference}.
 	 * @param ctx the parse tree
