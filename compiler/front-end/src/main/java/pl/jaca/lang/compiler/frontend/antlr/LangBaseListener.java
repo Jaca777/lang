@@ -1,4 +1,4 @@
-// Generated from C:/Users/Szymon/Desktop/Programming/lang/interpreter/src/main/resources/pl/jaca/lang\Lang.g4 by ANTLR 4.5.1
+// Generated from C:/Users/Szymon/Desktop/Programming/lang/compiler/front-end/src/main/resources/pl/jaca/lang\Lang.g4 by ANTLR 4.5.1
 package pl.jaca.lang.compiler.frontend.antlr;
 
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -232,13 +232,13 @@ public class LangBaseListener implements LangListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterLiteral(LangParser.LiteralContext ctx) { }
+	@Override public void enterIntLiteral(LangParser.IntLiteralContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitLiteral(LangParser.LiteralContext ctx) { }
+	@Override public void exitIntLiteral(LangParser.IntLiteralContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

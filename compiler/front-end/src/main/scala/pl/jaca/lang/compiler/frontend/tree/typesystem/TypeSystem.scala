@@ -10,13 +10,17 @@ abstract class TypeSystem {
 
 object TypeSystem {
 
+  object UnitType extends Type("unit") {
+    override def isSubtypeOf(t: Type): Boolean = false
+  }
+
   object AnyType extends Type("any") {
     override def isSubtypeOf(t: Type): Boolean = false
   }
 
   case class ValType(override val name: String, supertype: Type = AnyType) extends Type(name) {
     override def isSubtypeOf(t: Type): Boolean =
-      supertype == t || t.isSubtypeOf(supertype)
+      t == supertype || t.isSupertypeOf(supertype)
   }
 
 }

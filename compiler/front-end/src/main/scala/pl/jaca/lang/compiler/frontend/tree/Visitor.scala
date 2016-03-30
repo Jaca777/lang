@@ -30,14 +30,6 @@ class Visitor[T] {
     throw new UnsupportedOperationException("visitAssignment is not implemented.")
   }
 
-  def visitFunctionDeclaration(decl: FunctionDeclaration): T = {
-    throw new UnsupportedOperationException("visitFunctionDeclaration is not implemented.")
-  }
-
-  def visitFunctionDescriptor(desc: FunctionDescriptor): T = {
-    throw new UnsupportedOperationException("visitFunctionDescriptor is not implemented.")
-  }
-
   def visitReference(ref: ReferenceExpr): T = {
     throw new UnsupportedOperationException("visitReference is not implemented.")
   }

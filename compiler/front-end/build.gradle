@@ -3,6 +3,7 @@ version '1.0'
 
 apply plugin: 'java'
 apply plugin: 'scala'
+
 dependencies {
     compile 'org.antlr:antlr4-runtime:4.5.2'
     compile 'org.scala-lang:scala-library:2.11.1'
